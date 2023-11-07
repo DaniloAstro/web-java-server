@@ -68,14 +68,21 @@ public class UserController {
         }
 
         // better not to use user provided id, generate your own with AtomicLong or UUID
-        User u = new User(request.id, request.name,
-                request.email, request.friends);
-        users.add(u);
-        return ResponseEntity.ok(u);
+        User user = new User(
+                request.id,
+                request.name,
+                request.email,
+                request.friends
+        );
+        users.add(user);
+        return ResponseEntity.ok(user);
     }
 
     public User findUserById(int id) {
         // nice use of streams
-        return users.stream().filter(user -> user.getId().equals(id)).findFirst().orElse(null);
+        return users.stream()
+                .filter(user -> user.getId().equals(id))
+                .findFirst()
+                .orElse(null);
     }
 }
