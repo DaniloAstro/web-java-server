@@ -9,14 +9,18 @@ import java.util.List;
 
 @RestController
 public class UserController {
+    public final List<User> users = new ArrayList<>();
 
-    public List<User> users = new ArrayList<>();
     @GetMapping("/users")
     public ResponseEntity<List<User>> getAllUsers(){
-        if (users == null){
-            return ResponseEntity.badRequest().build();
-        }
-        else return ResponseEntity.ok(users);
+        // I'm not sure null is possible here,
+        // but I would just return empty list in that case.
+        // Empty list on server side - is not a problem with request itself, so 400 is not the best option
+        // My choice would be to make 'users' final and remove null checks
+//        if (users == null) {
+//            return ResponseEntity.badRequest().build();
+//        }
+        return ResponseEntity.ok(users);
     }
     @GetMapping("/users/{id}")
     public ResponseEntity<User> getUser(@PathVariable int id){
@@ -37,9 +41,6 @@ public class UserController {
     public ResponseEntity<User> updateUser(@PathVariable
                                            Integer id, @RequestBody User request){
         User user = findUserById(id);
-        if (users == null){
-            return ResponseEntity.badRequest().build();
-        }
         user.setName(request.getName());
         user.setEmail(request.getEmail());
         user.setFriends(request.getFriends());
