@@ -57,7 +57,8 @@ public class UserController {
         return ResponseEntity.noContent().build();
     }
 
-    @PostMapping ("/user")
+    // naming convention is to use plural nouns for endpoints
+    @PostMapping ("/users")
     public ResponseEntity<User> createUser(@RequestBody User request) {
         //request validation
         if (findUserById(request.getId()) != null) {
