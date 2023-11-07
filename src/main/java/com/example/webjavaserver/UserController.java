@@ -1,8 +1,13 @@
 package com.example.webjavaserver;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,16 +30,12 @@ public class UserController {
     @GetMapping("/users/{id}")
     public ResponseEntity<User> getUser(@PathVariable int id){
         User user = findUserById(id);
-        if (users == null){
+        // you probably meant to check user == null, not users (plural)
+        // also, I would return 404, not 400
+        if (user == null){
             return ResponseEntity.badRequest().build();
         }
         else return ResponseEntity.ok(user);
-    }
-    public User findUserById(int id){
-        return users.stream()
-                .filter(user -> user.getId().equals(id))
-                .findFirst()
-                .orElse(null);
     }
 
     @PutMapping("/users/{id}")
@@ -71,5 +72,10 @@ public class UserController {
                 request.email, request.friends);
         users.add(u);
         return ResponseEntity.ok(u);
+    }
+
+    public User findUserById(int id) {
+        // nice use of streams
+        return users.stream().filter(user -> user.getId().equals(id)).findFirst().orElse(null);
     }
 }
