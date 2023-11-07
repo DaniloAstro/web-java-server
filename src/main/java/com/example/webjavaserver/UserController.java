@@ -65,6 +65,7 @@ public class UserController {
             return ResponseEntity.badRequest().build();
         }
 
+        // better not to use user provided id, generate your own with AtomicLong or UUID
         User u = new User(request.id, request.name,
                 request.email, request.friends);
         users.add(u);
